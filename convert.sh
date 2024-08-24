@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROVIDER="${PROVIDER:-github_runner}"
+PROVIDER="${PROVIDER:-github}"
 MACHINE="${MACHINE:-2vCPU_7GB}"
 
 cat log.txt | grep -P '^\d|Killed|Segmentation' | sed -r -e 's/^.*(Killed|Segmentation).*$/null\nnull\nnull/' | awk '{ if (i % 3 == 0) { printf "[" }; printf $1; if (i % 3 != 2) { printf "," } else { print "]," }; ++i; }' > dump.json 
@@ -9,17 +9,17 @@ rm -rf dump.json
 
 mkdir -p results
 
-VERSION=$(python3 -c "import duckdb; print(duckdb.__version__)")
+VERSION=$(curl -S http://localhost:8123?query=SELECT version()")
 
 echo '{
-    "system": "DuckDB",
+    "system": "CowsDB",
     "date": "'$(date +%F)'",
     "machine": "'$PROVIDER $MACHINE'",
     "cluster_size": "serverless",
     "comment": "'$VERSION'",
     "tags": ["C++", "column-oriented", "embedded", "github"],
     "load_time": 0,
-    "data_size": '$(find . -type f -name "*.parquet" -print0 | xargs -0r du -cb | tail -n1 | awk '{print $1}')',
+    "data_size": '0',
     "result": [
       '$(echo $RESULTS | head -c-2)'
     ]
