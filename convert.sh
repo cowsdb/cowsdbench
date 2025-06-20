@@ -9,7 +9,7 @@ rm -rf dump.json
 
 mkdir -p results
 
-VERSION=$(curl -S http://localhost:8123?query=SELECT version()")
+VERSION=$(curl -S "http://localhost:8123?query=SELECT%20version()")
 
 echo '{
     "system": "CowsDB",
