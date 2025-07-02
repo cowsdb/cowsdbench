@@ -43,6 +43,10 @@ jobs:
       - name: WIP Wait for it
         run: |
           curl -G --data-urlencode "query=SELECT version(), now()" http://test:test@localhost:8123
+
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v2.0.0
+        
       - name: WIP Load Data
         run: |
           curl -G -s --data-urlencode "query=CREATE DATABASE IF NOT EXISTS clickbench" http://test:test@localhost:8123
